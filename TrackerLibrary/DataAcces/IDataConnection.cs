@@ -13,8 +13,8 @@ namespace TrackerLibrary
         List<Person> GetAll_Persons();
         TeamModel CreateTeam(TeamModel model);
         TournamentModel CreateTournament(TournamentModel model);
+        void updateMatchups(MatchModel model);
         List<TeamModel> GetAll_Team();
-
         List<PrizeModel> GetAll_Prize();
         List<TournamentModel> GetAll_Tournaments();
     }

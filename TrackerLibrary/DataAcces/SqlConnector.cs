@@ -109,7 +109,8 @@ namespace TrackerLibrary
 					p.Add("@Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
 					cnn.Execute("dbo.spTournamentPrizes_Insert", p, commandType: CommandType.StoredProcedure);
-				}
+                    //tp.Id = p.Get<int>("@Id");
+                }
 
 				//Save a tournament entries
 				foreach (TeamModel tm in model.EnteredTeams)
@@ -120,6 +121,8 @@ namespace TrackerLibrary
 					p.Add("@Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
 					cnn.Execute("dbo.TournamentEntries_Insert", p, commandType: CommandType.StoredProcedure);
+
+					//tm.Id = p.Get<int>("@Id");
 				}
 
                 //Save a tournanemts rounds
@@ -129,7 +132,7 @@ namespace TrackerLibrary
 					{
                         p = new DynamicParameters();
                         p.Add("@TournamentId", model.Id);
-                        p.Add("@MatchupRound", match.MatchUpRound);
+                        p.Add("@MatchupRound", match.MatchupRound);
                         p.Add("@Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
 						cnn.Execute("dbo.spMatchups_Insert", p, commandType: CommandType.StoredProcedure);
@@ -159,7 +162,7 @@ namespace TrackerLibrary
 							}
 							p.Add("@Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-							cnn.Execute("dbo.spMatchupEntries_Insert", p, commandType: CommandType.StoredProcedure);
+                            cnn.Execute("dbo.spMatchupEntries_Insert", p, commandType: CommandType.StoredProcedure);
 
 							en.Id = p.Get<int>("@Id");
 						}
@@ -244,19 +247,19 @@ namespace TrackerLibrary
 						match.Entries = cnn.Query<MatchEntryModel>("dbo.spMatchupEntries_GetByMatchup", p, commandType: CommandType.StoredProcedure).ToList();
 
 						List<TeamModel> allTeams = GetAll_Team();
-						if(match.WinnerId > 0)
+						if(match.Winnerid > 0)
                         {
-							match.Winner = allTeams.Where(x => x.Id == match.WinnerId).First();
+							match.Winner = allTeams.Where(x => x.Id == match.Winnerid).First();
                         }
                         foreach (MatchEntryModel entry in match.Entries)
                         {
-							if(entry.TeamCompetingId > 0)
+							if(entry.TeamCompetingid > 0)
                             {
-								entry.TeamCompeting = allTeams.Where(x => x.Id == entry.TeamCompetingId).First();
+								entry.TeamCompeting = allTeams.Where(x => x.Id == entry.TeamCompetingid).First();
                             }
-							if(entry.ParentMatchId >0)
+							if(entry.ParentMatchid > 0)
                             {
-								entry.ParentMatch = matches.Where(x => x.Id == entry.ParentMatchId).First();
+								entry.ParentMatch = matches.Where(x => x.Id == entry.ParentMatchid).First();
                             }
                         }
 					}
@@ -266,7 +269,7 @@ namespace TrackerLibrary
 					int currRound = 1;
                     foreach (MatchModel m in matches)
                     {
-						if (m.MatchUpRound > currRound)
+						if (m.MatchupRound > currRound)
                         {
 							t.Rounds.Add(currMatchup);
 							currRound += 1;
@@ -279,5 +282,27 @@ namespace TrackerLibrary
             }
 			return output;
         }
-    }
+
+        public void updateMatchups(MatchModel model)
+        {
+			using (IDbConnection cnn = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString(db)))
+			{
+				DynamicParameters p = new DynamicParameters();
+				p.Add("@id", model.Id);
+				p.Add("@winnerId", model.Winner.Id);
+
+				cnn.Execute("dbo.spMatchups_Update", p, commandType: CommandType.StoredProcedure);
+
+                foreach (MatchEntryModel me in model.Entries)
+                {
+					p = new DynamicParameters();
+					p.Add("@id", model.Id);
+					p.Add("@teamCompeting", me.TeamCompeting.Id);
+					p.Add("@score", me.Score);
+
+					cnn.Execute("dbo.spMatchupEntries_Update", p, commandType: CommandType.StoredProcedure);
+				}
+			}
+		}
+	}
 }

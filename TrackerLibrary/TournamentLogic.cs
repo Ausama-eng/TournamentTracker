@@ -16,10 +16,10 @@ namespace TrackerLibrary
         {
             List<TeamModel> RandomizedTeams = RandomizeTeamsOrders(model.EnteredTeams);
             model.EnteredTeams = RandomizedTeams;
-            int rounds = FindNumberOfRounds(RandomizedTeams.Count);
-            int byes = numberOfBys(rounds, RandomizedTeams.Count);
+            int rounds = FindNumberOfRounds(model.EnteredTeams.Count);
+            int byes = numberOfBys(rounds, model.EnteredTeams.Count);
 
-            model.Rounds.Add(CreateFirstRound(rounds, RandomizedTeams));
+            model.Rounds.Add(CreateFirstRound(byes, model.EnteredTeams));
 
             CreateOtherRounds(model, rounds);
         }
@@ -33,7 +33,7 @@ namespace TrackerLibrary
                 curr.Entries.Add(new MatchEntryModel { TeamCompeting = team });
                 if (byes > 0 || curr.Entries.Count > 1)
                 {
-                    curr.MatchUpRound = 1;
+                    curr.MatchupRound = 1;
                     output.Add(curr);
                     curr = new MatchModel();
                     if (byes > 0)
@@ -89,7 +89,7 @@ namespace TrackerLibrary
 
                     if(currMatchup.Entries.Count >1)
                     {
-                        currMatchup.MatchUpRound = round;
+                        currMatchup.MatchupRound = round;
                         currRound.Add(currMatchup);
                         currMatchup = new MatchModel();
                     }

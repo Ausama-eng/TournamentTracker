@@ -101,6 +101,7 @@ namespace TrackerUI
             this.unplayedCheckBox.TabIndex = 4;
             this.unplayedCheckBox.Text = "Unplayed Only";
             this.unplayedCheckBox.UseVisualStyleBackColor = true;
+            this.unplayedCheckBox.CheckedChanged += new System.EventHandler(this.unplayedCheckBox_CheckedChanged);
             // 
             // matchUpList
             // 
@@ -223,7 +224,7 @@ namespace TrackerUI
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.Name = "TournamentViewerForm";
-            this.Text = "Tournament Form";
+            this.Text = "Tournament Viewer";
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -231,10 +231,13 @@ namespace TrackerLibrary.DataAcces.TextHelper
 
             matchups.Add(matchup);
 
+            //Save Entries
             foreach (MatchEntryModel entry in matchup.Entries)
             {
                 entry.SaveEntrytoFile();
             }
+
+            //Save match to file
             List<string> lines = new List<string>();
 
             foreach (MatchModel match in matchups)
@@ -244,7 +247,47 @@ namespace TrackerLibrary.DataAcces.TextHelper
                 {
                     winner = match.Winner.Id.ToString();
                 }
-                lines.Add($"{match.Id},{ConvertMatchupEntryToString(match.Entries)},{winner},{match.MatchUpRound}");
+                lines.Add($"{match.Id},{ConvertMatchupEntryToString(match.Entries)},{winner},{match.MatchupRound}");
+            }
+            File.WriteAllLines(GlobalConfig.MatchupFile.FullFilePath(), lines);
+
+        }
+
+        public static void updateMatchupToFile(this MatchModel matchup)
+        {
+            List<MatchModel> matchups = GlobalConfig.MatchupFile.FullFilePath().LoadFile().ConvertToMatchupModel();
+            
+            MatchModel oldMatchup = new MatchModel();
+
+            foreach (MatchModel m in matchups)
+            {
+                if (m.Id == matchup.Id)
+                {
+                    oldMatchup = m;
+                }
+            }
+
+            matchups.Remove(oldMatchup);
+            matchups.Add(matchup);
+
+            matchups.OrderBy(x => x.Id);
+
+            // Update matchup Entries.
+            foreach (MatchEntryModel entry in matchup.Entries)
+            {
+                entry.UpdateEntrytoFile();
+            }
+
+            List<string> lines = new List<string>();
+
+            foreach (MatchModel match in matchups)
+            {
+                string winner = "";
+                if (match.Winner != null)
+                {
+                    winner = match.Winner.Id.ToString();
+                }
+                lines.Add($"{match.Id},{ConvertMatchupEntryToString(match.Entries)},{winner},{match.MatchupRound}");
             }
             File.WriteAllLines(GlobalConfig.MatchupFile.FullFilePath(), lines);
 
@@ -269,6 +312,46 @@ namespace TrackerLibrary.DataAcces.TextHelper
             {
                 string parent = "";
                 if(e.ParentMatch != null)
+                {
+                    parent = $"{e.ParentMatch.Id}";
+                }
+
+                string teamCompet = "";
+                if (e.TeamCompeting != null)
+                {
+                    teamCompet = $"{e.TeamCompeting.Id}";
+                }
+                lines.Add($"{e.Id},{teamCompet},{e.Score},{parent}");
+            }
+
+            File.WriteAllLines(GlobalConfig.MatchupEntryFile.FullFilePath(), lines);
+        }
+
+        public static void UpdateEntrytoFile(this MatchEntryModel entry)
+        {
+            List<MatchEntryModel> Entries = GlobalConfig.MatchupEntryFile.FullFilePath().LoadFile().ConvertToMatchupEntry();
+
+            MatchEntryModel oldEntry = new MatchEntryModel();
+
+            foreach (MatchEntryModel e in Entries)
+            {
+                if(e.Id == entry.Id)
+                {
+                    oldEntry = e;
+               
+                }
+            }
+
+            Entries.Remove(oldEntry);
+            Entries.Add(entry);
+            Entries.OrderBy(x => x.Id);
+
+            List<string> lines = new List<string>();
+
+            foreach (MatchEntryModel e in Entries)
+            {
+                string parent = "";
+                if (e.ParentMatch != null)
                 {
                     parent = $"{e.ParentMatch.Id}";
                 }
@@ -403,7 +486,7 @@ namespace TrackerLibrary.DataAcces.TextHelper
                 {
                     p.Winner = null;
                 }
-                p.MatchUpRound = int.Parse(cols[3]);
+                p.MatchupRound = int.Parse(cols[3]);
 
                 output.Add(p);
             }

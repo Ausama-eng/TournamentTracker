@@ -24,7 +24,7 @@ namespace TrackerLibrary
         /// <summary>
         /// The ID from the database that will be used to identify the winner.
         /// </summary>
-        public int WinnerId { get; set; }
+        public int Winnerid { get; set; }
 
         /// <summary>
         /// the winner of the match.
@@ -34,7 +34,7 @@ namespace TrackerLibrary
         /// <summary>
         /// Which round this match is a part of.
         /// </summary>
-        public  int MatchUpRound { get; set; }
+        public  int MatchupRound { get; set; }
 
         /// <summary>
         /// The name of the match that displays in team viewer.
@@ -47,7 +47,7 @@ namespace TrackerLibrary
                 {
                     if (me.TeamCompeting != null)
                     {
-                        if (output.Length != 0)
+                        if (output.Length == 0)
                         {
                             output = me.TeamCompeting.TeamName;
                         }
