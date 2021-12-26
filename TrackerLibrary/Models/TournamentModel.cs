@@ -14,7 +14,7 @@ namespace TrackerLibrary
         /// <summary>
         /// The unique identifier for the tournaments.
         /// </summary>
-        public int Id { get; set; }
+        public int id { get; set; }
         /// <summary>
         /// The name of the tournament.
         /// </summary>
@@ -23,7 +23,7 @@ namespace TrackerLibrary
         /// <summary>
         /// Amount of money the each team needs to put up to enter.
         /// </summary>
-        public decimal Entryfee { get; set; }
+        public decimal EntryFee { get; set; }
 
         /// <summary>
         /// The set of teams that entered.

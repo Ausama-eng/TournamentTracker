@@ -14,7 +14,7 @@ namespace TrackerLibrary
         /// <summary>
         /// The unique identifier for the matchup.
         /// </summary>
-        public int Id { get; set; }
+        public int id { get; set; }
 
         /// <summary>
         /// The set of teams that were involved in this match.

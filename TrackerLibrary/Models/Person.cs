@@ -15,7 +15,7 @@ namespace TrackerLibrary
         /// <summary>
         /// The unique identifier for a person
         /// </summary>
-        public int Id { get; set; }
+        public int id { get; set; }
 
         /// <summary>
         /// First name of a person

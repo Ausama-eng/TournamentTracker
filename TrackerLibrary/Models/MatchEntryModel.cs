@@ -14,7 +14,7 @@ namespace TrackerLibrary
         /// <summary>
         /// The unique identifier of the match entry
         /// </summary>
-        public int Id { get; set; }
+        public int id { get; set; }
 
         /// <summary>
         /// Represent identifier for a team
@@ -34,7 +34,7 @@ namespace TrackerLibrary
         /// <summary>
         /// Represent the identifier of parent match
         /// </summary>
-        public int ParentMatchid { get; set; }
+        public int ParentMatchupid { get; set; }
 
         /// <summary>
         /// Represent the match that this team came 

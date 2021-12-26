@@ -14,7 +14,7 @@ namespace TrackerLibrary
         /// <summary>
         /// This is a unique identfication of a team.
         /// </summary>
-        public int Id { get; set; }
+        public int id { get; set; }
 
         /// <summary>
         /// A name of a team.

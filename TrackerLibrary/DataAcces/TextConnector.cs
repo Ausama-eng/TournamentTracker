@@ -22,9 +22,9 @@ namespace TrackerLibrary
             int currentId = 1;
             if (people.Count > 0)
             {
-                currentId = people.OrderByDescending(x => x.Id).First().Id + 1;
+                currentId = people.OrderByDescending(x => x.id).First().id + 1;
             }
-            model.Id = currentId;
+            model.id = currentId;
 
             people.Add(model);
 
@@ -41,9 +41,9 @@ namespace TrackerLibrary
 
             if (prizes.Count > 0)
             {
-                currentId = prizes.OrderByDescending(x => x.Id).First().Id + 1;
+                currentId = prizes.OrderByDescending(x => x.id).First().id + 1;
             }
-            model.Id = currentId;
+            model.id = currentId;
 
             prizes.Add(model);
 
@@ -60,9 +60,9 @@ namespace TrackerLibrary
             int currentid = 1;
             if (teams.Count>0)
             {
-                currentid = teams.OrderByDescending(x => x.Id).First().Id + 1;
+                currentid = teams.OrderByDescending(x => x.id).First().id + 1;
             }
-            model.Id = currentid;
+            model.id = currentid;
 
             teams.Add(model);
 
@@ -81,9 +81,9 @@ namespace TrackerLibrary
             int currentid = 1;
             if (tournaments.Count > 0)
             {
-                currentid = tournaments.OrderByDescending(x => x.Id).First().Id + 1;
+                currentid = tournaments.OrderByDescending(x => x.id).First().id + 1;
             }
-            model.Id = currentid;
+            model.id = currentid;
 
             model.SaveRoundToFile();
             tournaments.Add(model);

@@ -15,7 +15,7 @@ namespace TrackerLibrary
         /// <summary>
         /// The unique identifier for a prize
         /// </summary>
-        public int Id { get; set; }
+        public int id { get; set; }
         /// <summary>
         /// The numeric identifier for the place (2 for the scond place, etc).
         /// </summary>

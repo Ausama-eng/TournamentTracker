@@ -20,7 +20,7 @@ namespace TrackerUI
 
         private void WireUpList()
         {
-            //loadExistingTournamentDropDown.DataSource = null;
+            loadExistingTournamentDropDown.DataSource = null;
             loadExistingTournamentDropDown.DataSource = tournaments;
             loadExistingTournamentDropDown.DisplayMember = "TournamentName";
         }

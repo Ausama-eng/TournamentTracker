@@ -230,7 +230,7 @@ namespace TrackerUI
                     {
                         if (me.ParentMatch != null)
                         {
-                            if (me.ParentMatch.Id == m.Id)
+                            if (me.ParentMatch.id == m.id)
                             {
                                 me.TeamCompeting = m.Winner;
                                 GlobalConfig.Connection.updateMatchups(rm);

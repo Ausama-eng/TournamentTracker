@@ -122,7 +122,7 @@ namespace TrackerUI
                 return;
             }
 
-            tm.Entryfee = fee;
+            tm.EntryFee = fee;
             tm.Prizes = selectedPrizes;
             tm.EnteredTeams = selectedTeams;
 
