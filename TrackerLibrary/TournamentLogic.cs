@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
+using System.Configuration;
 
 namespace TrackerLibrary
 {
@@ -99,6 +100,100 @@ namespace TrackerLibrary
 
                 currRound = new List<MatchModel>();
                 round += 1;
+            }
+        }
+
+        public static void UpdateTournamentResult(TournamentModel model)
+        {
+            List<MatchModel> toScore = new List<MatchModel>();
+
+            foreach (List<MatchModel> round in model.Rounds)
+            {
+                foreach (MatchModel rm in round)
+                {
+                    if (rm.Winner != null && (rm.Entries.Any(x => x.Score != 0) || rm.Entries.Count == 1))
+                    {
+                        toScore.Add(rm);
+                    }
+                }
+            }
+
+            MarkTheWinner(toScore);
+
+            AdvanceWinners(toScore, model);
+
+            toScore.ForEach(x => GlobalConfig.Connection.updateMatchups(x));
+        }
+
+        private static void MarkTheWinner(List<MatchModel> model)
+        {
+            //greater or lesser
+            string greaterWins = ConfigurationManager.AppSettings["greaterWins"];
+
+            foreach (MatchModel m in model)
+            {
+                //checks for bye week entry
+                if (m.Entries.Count == 1)
+                {
+                    m.Winner = m.Entries[0].TeamCompeting;
+                    continue;
+                }
+                //Low score wins if 0
+                if (greaterWins == "0")
+                {
+                    if (m.Entries[0].Score < m.Entries[1].Score)
+                    {
+                        m.Winner = m.Entries[0].TeamCompeting;
+                    }
+                    else if (m.Entries[1].Score < m.Entries[0].Score)
+                    {
+                        m.Winner = m.Entries[1].TeamCompeting;
+                    }
+                    else
+                    {
+                        throw new Exception("We don't allow Tied Match");
+                    }
+                }
+                else
+                {
+                    //i mean higher score wins
+                    if (m.Entries[0].Score > m.Entries[1].Score)
+                    {
+                        m.Winner = m.Entries[0].TeamCompeting;
+                    }
+                    else if (m.Entries[1].Score > m.Entries[0].Score)
+                    {
+                        m.Winner = m.Entries[1].TeamCompeting;
+                    }
+                    else
+                    {
+                        throw new Exception("We don't allow Tied Match");
+                    }
+                } 
+            }
+        }
+
+        private static void AdvanceWinners(List<MatchModel> models, TournamentModel tournament)
+        {
+            foreach (MatchModel m in models)
+            {
+                foreach (List<MatchModel> round in tournament.Rounds)
+                {
+                    foreach (MatchModel rm in round)
+                    {
+                        foreach (MatchEntryModel me in rm.Entries)
+                        {
+                            if (me.ParentMatch != null)
+                            {
+                                if (me.ParentMatch.id == m.id)
+                                {
+                                    me.TeamCompeting = m.Winner;
+                                    GlobalConfig.Connection.updateMatchups(rm);
+                                }
+                            } 
+                        }
+                    }
+                }
             }
         }
     }

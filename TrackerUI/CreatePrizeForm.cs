@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using TrackerLibrary;
-using System.Data.SqlClient;
 
 namespace TrackerUI
 {
@@ -24,7 +23,7 @@ namespace TrackerUI
                     priceAmountValue.Text,
                     PricePercentage.Text);
 
-                model = GlobalConfig.Connection.CreatePrizes(model);
+                GlobalConfig.Connection.CreatePrizes(model);
 
                 CallerForm.PrizeComplete(model);
 

@@ -70,7 +70,7 @@ namespace TrackerUI
                     cellphoneValue.Text
                     );
 
-                p = GlobalConfig.Connection.CreatePerson(p);
+                GlobalConfig.Connection.CreatePerson(p);
 
                 availableMemebers.Add(p);
 
@@ -136,7 +136,7 @@ namespace TrackerUI
                 t.TeamName = TeamNameValue.Text;
                 t.TeamMember = selectedTeamMembers;
 
-                t = GlobalConfig.Connection.CreateTeam(t);
+                GlobalConfig.Connection.CreateTeam(t);
                 CallForm.TeamComplete(t);
 
                 this.Close();

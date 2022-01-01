@@ -16,7 +16,7 @@ namespace TrackerLibrary
 		/// </summary>
 		/// <param name="model">The person information</param>
 		/// <returns>   the person information, including unique id</returns>
-		public Person CreatePerson(Person model)
+		public void CreatePerson(Person model)
 		{
 			using (IDbConnection cnn = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString(db)))
 			{
@@ -32,7 +32,6 @@ namespace TrackerLibrary
 				model.id = p.Get<int>("@id");
 
 			}
-			return model;
 
 		}
 
@@ -41,7 +40,7 @@ namespace TrackerLibrary
 		/// </summary>
 		/// <param name="model">The prize information</param>
 		/// <returns>The prize information, including unique identifier</returns>
-		public PrizeModel CreatePrizes(PrizeModel model)
+		public void CreatePrizes(PrizeModel model)
 		{
 			using (IDbConnection cnn = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString(db)))
 			{
@@ -57,11 +56,10 @@ namespace TrackerLibrary
 				model.id = p.Get<int>("@id");
 
 			}
-			return model;
 
 		}
 
-        public TeamModel CreateTeam(TeamModel model)
+        public void CreateTeam(TeamModel model)
         {
 			using(IDbConnection cnn = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString(db)))
             {
@@ -83,10 +81,9 @@ namespace TrackerLibrary
 
 				}
 			}
-			return model;
         }
 
-        public TournamentModel CreateTournament(TournamentModel model)
+        public void CreateTournament(TournamentModel model)
         {
 			using (IDbConnection cnn = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString(db)))
 			{
@@ -109,7 +106,6 @@ namespace TrackerLibrary
 					p.Add("@Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
 					cnn.Execute("dbo.spTournamentPrizes_Insert", p, commandType: CommandType.StoredProcedure);
-                    //tp.Id = p.Get<int>("@Id");
                 }
 
 				//Save a tournament entries
@@ -122,7 +118,6 @@ namespace TrackerLibrary
 
 					cnn.Execute("dbo.TournamentEntries_Insert", p, commandType: CommandType.StoredProcedure);
 
-					//tm.Id = p.Get<int>("@Id");
 				}
 
                 //Save a tournanemts rounds
@@ -171,7 +166,7 @@ namespace TrackerLibrary
 				}
 
 			}
-			return model;
+			TournamentLogic.UpdateTournamentResult(model);
 		}
 
         public List<Person> GetAll_Persons()
@@ -297,14 +292,17 @@ namespace TrackerLibrary
                     cnn.Execute("dbo.spMatchups_Update", p, commandType: CommandType.StoredProcedure);
                 }
                 foreach (MatchEntryModel me in model.Entries)
-                {
-					p = new DynamicParameters();
-					p.Add("@id", model.id);
-					p.Add("@teamCompeting", me.TeamCompeting.id);
-					p.Add("@score", me.Score);
+                    if (me.TeamCompeting != null)
+                    {
+                        {
+                            p = new DynamicParameters();
+                            p.Add("@id", model.id);
+                            p.Add("@teamCompeting", me.TeamCompeting.id);
+                            p.Add("@score", me.Score);
 
-					cnn.Execute("dbo.spMatchupEntries_Update", p, commandType: CommandType.StoredProcedure);
-				}
+                            cnn.Execute("dbo.spMatchupEntries_Update", p, commandType: CommandType.StoredProcedure);
+                        } 
+                    }
 			}
 		}
 	}

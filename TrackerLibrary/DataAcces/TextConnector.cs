@@ -9,15 +9,9 @@ namespace TrackerLibrary
 {
     public class TextConnector : IDataConnection
     {
-        private const string PrizeFile = "PrizeModels.csv";
-        private const string PersonFile = "PersonModel.csv";
-        private const string TeamFile = "TeamModel.csv";
-        private const string TournamentFile = "TournamentModel.csv";
-
-
-        public Person CreatePerson(Person model)
+        public void CreatePerson(Person model)
         {
-            List<Person> people = PersonFile.FullFilePath().LoadFile().ConvertToPersonModel();
+            List<Person> people = GlobalConfig.PersonFile.FullFilePath().LoadFile().ConvertToPersonModel();
 
             int currentId = 1;
             if (people.Count > 0)
@@ -28,14 +22,12 @@ namespace TrackerLibrary
 
             people.Add(model);
 
-            people.SavePerson(PersonFile);
-
-            return model;
+            people.SavePerson();
         }
 
-        public PrizeModel CreatePrizes(PrizeModel model)
+        public void CreatePrizes(PrizeModel model)
         {
-            List<PrizeModel> prizes = PrizeFile.FullFilePath().LoadFile().ConverToPrizeModel();
+            List<PrizeModel> prizes = GlobalConfig.PrizeFile.FullFilePath().LoadFile().ConverToPrizeModel();
 
             int currentId = 1;
 
@@ -47,14 +39,13 @@ namespace TrackerLibrary
 
             prizes.Add(model);
 
-            prizes.SavePrizesFile(PrizeFile);
+            prizes.SavePrizesFile();
 
-            return model;
         }
 
-        public TeamModel CreateTeam(TeamModel model)
+        public void CreateTeam(TeamModel model)
         {
-            List<TeamModel> teams = TeamFile.FullFilePath().LoadFile().ConvertToTeamModel(PersonFile);
+            List<TeamModel> teams = GlobalConfig.TeamFile.FullFilePath().LoadFile().ConvertToTeamModel();
 
             //Find max id
             int currentid = 1;
@@ -66,17 +57,15 @@ namespace TrackerLibrary
 
             teams.Add(model);
 
-            teams.SaveTeam(TeamFile);
-
-            return model;
+            teams.SaveTeam();
         }
 
-        public TournamentModel CreateTournament(TournamentModel model)
+        public void CreateTournament(TournamentModel model)
         {
-            List<TournamentModel> tournaments = TournamentFile.
+            List<TournamentModel> tournaments = GlobalConfig.TournamentFile.
                 FullFilePath().
                 LoadFile().
-                ConvertToTorunamentModel(PersonFile, TeamFile,PrizeFile);
+                ConvertToTorunamentModel();
 
             int currentid = 1;
             if (tournaments.Count > 0)
@@ -88,34 +77,35 @@ namespace TrackerLibrary
             model.SaveRoundToFile();
             tournaments.Add(model);
 
-            tournaments.SaveToTournamentFile(TournamentFile);
-            return model;
+            tournaments.SaveToTournamentFile();
+            TournamentLogic.UpdateTournamentResult(model);
+
         }
 
         public List<Person> GetAll_Persons()
         {
-            return PersonFile.FullFilePath().LoadFile().ConvertToPersonModel();
+            return GlobalConfig.PersonFile.FullFilePath().LoadFile().ConvertToPersonModel();
         }
 
         public List<PrizeModel> GetAll_Prize()
         {
-            return PrizeFile.FullFilePath().LoadFile().ConverToPrizeModel();
+            return GlobalConfig.PrizeFile.FullFilePath().LoadFile().ConverToPrizeModel();
         }
 
         public List<TeamModel> GetAll_Team()
         {
-            return TeamFile.FullFilePath().LoadFile().ConvertToTeamModel(PersonFile);
+            return GlobalConfig.TeamFile.FullFilePath().LoadFile().ConvertToTeamModel();
         }
 
         public List<TournamentModel> GetAll_Tournaments()
         {
-            return TournamentFile.FullFilePath().LoadFile().
-                ConvertToTorunamentModel(PersonFile, TeamFile, PrizeFile);
+            return GlobalConfig.TournamentFile.FullFilePath().LoadFile().
+                ConvertToTorunamentModel();
         }
 
         public void updateMatchups(MatchModel model)
         {
-
+            model.updateMatchupToFile();
         }
     }
 }

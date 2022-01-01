@@ -191,7 +191,7 @@ namespace TrackerUI
                     {
                         teamtwoLabel.Text = m.Entries[1].TeamCompeting.TeamName;
 
-                        bool scoreValid = double.TryParse(teamtwoLabel.Text, out teamTwoScore);
+                        bool scoreValid = double.TryParse(teamtwoScoreText.Text, out teamTwoScore);
                         if (scoreValid)
                         {
                             m.Entries[1].Score = teamTwoScore;
@@ -209,40 +209,10 @@ namespace TrackerUI
                     }
                 }
             }
-            if (teamOneScore > teamTwoScore)
-            {
-                m.Winner = m.Entries[0].TeamCompeting;
-            }
-            else if (teamTwoScore > teamOneScore)
-            {
-                m.Winner = m.Entries[1].TeamCompeting;
-            }
-            else
-            {
-                MessageBox.Show("I do not support a tie game");
-            }
 
-            foreach (List<MatchModel> round in tournament.Rounds)
-            {
-                foreach (MatchModel rm  in round)
-                {
-                    foreach (MatchEntryModel me  in rm.Entries)
-                    {
-                        if (me.ParentMatch != null)
-                        {
-                            if (me.ParentMatch.id == m.id)
-                            {
-                                me.TeamCompeting = m.Winner;
-                                GlobalConfig.Connection.updateMatchups(rm);
-                            } 
-                        }
-                    }
-                }
-            }
+            TournamentLogic.UpdateTournamentResult(tournament);
 
             LoadMatchups((int)roundDropDown.SelectedItem);
-
-            GlobalConfig.Connection.updateMatchups(m);
         }
     }
 }
