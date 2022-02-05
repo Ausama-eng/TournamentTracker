@@ -155,8 +155,43 @@ namespace TrackerUI
             LoadMatchups((int)roundDropDown.SelectedItem);
         }
 
+        private string ValidData()
+        {
+            string output = "";
+
+            bool validOne = double.TryParse(teamoneScoretext.Text, out double ScoreOne);
+            bool validTow = double.TryParse(teamtwoScoreText.Text, out double ScoreTow);
+
+            if(!validOne)
+            {
+                output = "The score one value is not a valid number";
+            }
+            else if(!validTow)
+            {
+                output = "The score two is not a valid number";
+            }
+            else if(ScoreOne == 0 && ScoreTow == 0)
+            {
+                output = "You did not enter a score for either team";
+            }
+            else if(ScoreOne == ScoreTow)
+            {
+                output = "We did not allow ties in the application";
+            }
+
+            return output;
+        }
+
         private void scoreButton_Click(object sender, EventArgs e)
         {
+
+            string message = ValidData();
+
+            if (message.Length > 0)
+            {
+                MessageBox.Show($"Input Erorr: {message}");
+                return; 
+            }
             MatchModel m = (MatchModel)matchUpList.SelectedItem;
             double teamOneScore = 0, teamTwoScore = 0;
 
@@ -209,8 +244,15 @@ namespace TrackerUI
                     }
                 }
             }
-
-            TournamentLogic.UpdateTournamentResult(tournament);
+            try
+            {
+                TournamentLogic.UpdateTournamentResult(tournament);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"The application had the following erorr: {ex.Message}");
+                return;
+            }
 
             LoadMatchups((int)roundDropDown.SelectedItem);
         }

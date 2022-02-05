@@ -296,7 +296,7 @@ namespace TrackerLibrary
                     {
                         {
                             p = new DynamicParameters();
-                            p.Add("@id", model.id);
+                            p.Add("@id", me.id);
                             p.Add("@teamCompeting", me.TeamCompeting.id);
                             p.Add("@score", me.Score);
 
