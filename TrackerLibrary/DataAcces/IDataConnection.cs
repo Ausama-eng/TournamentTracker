@@ -17,5 +17,6 @@ namespace TrackerLibrary
         List<TeamModel> GetAll_Team();
         List<PrizeModel> GetAll_Prize();
         List<TournamentModel> GetAll_Tournaments();
+       // void CompleteTournament(TournamentModel model);
     }
 }

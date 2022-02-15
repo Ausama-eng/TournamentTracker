@@ -9,6 +9,19 @@ namespace TrackerLibrary
 {
     public class TextConnector : IDataConnection
     {
+        //public void CompleteTournament(TournamentModel model)
+        //{
+        //    List<TournamentModel> tournaments = GlobalConfig.TournamentFile.
+        //        FullFilePath().
+        //        LoadFile().
+        //        ConvertToTorunamentModel();
+
+        //    tournaments.Remove(model);
+
+        //    tournaments.SaveToTournamentFile();
+        //    TournamentLogic.UpdateTournamentResult(model);
+        //}
+
         public void CreatePerson(Person model)
         {
             List<Person> people = GlobalConfig.PersonFile.FullFilePath().LoadFile().ConvertToPersonModel();
