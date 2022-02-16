@@ -10,10 +10,26 @@ namespace TrackerLibrary
     {
         public static void sendEmail(string to, string subject, string body)
         {
+            sendEmail(new List<string> { to }, new List<string>(), subject, body);
+        }
+
+
+        public static void sendEmail(List<string> to, List<string> bcc, string subject, string body)
+        {
             MailAddress fromMail = new MailAddress(ConfigurationManager.AppSettings["sendEmail"], ConfigurationManager.AppSettings["senderDisplay"]);
 
             MailMessage mail = new MailMessage();
-            mail.To.Add(to);
+
+            foreach (string email in to)
+            {
+                mail.To.Add(email); 
+            }
+            foreach (string email in bcc)
+            {
+                mail.To.Add(email);
+            }
+
+
             mail.From = fromMail;
             mail.Subject = subject;
             mail.Body = body;

@@ -12,17 +12,23 @@ namespace TrackerLibrary
 	{
 		private const string db = "Tournaments";
 
-        //public void CompleteTournament(TournamentModel model)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        public void CompleteTournament(TournamentModel model)
+        {
+			using (IDbConnection cnn = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString(db)))
+            {
+				var p = new DynamicParameters();
+				p.Add("@id", model.id);
 
-        /// <summary>
-        /// To save a team member into database by using dapper
-        /// </summary>
-        /// <param name="model">The person information</param>
-        /// <returns>   the person information, including unique id</returns>
-        public void CreatePerson(Person model)
+				cnn.Execute("dbo.spTournament_complete", p, commandType: CommandType.StoredProcedure);
+            }
+		}
+
+		/// <summary>
+		/// To save a team member into database by using dapper
+		/// </summary>
+		/// <param name="model">The person information</param>
+		/// <returns>   the person information, including unique id</returns>
+		public void CreatePerson(Person model)
 		{
 			using (IDbConnection cnn = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString(db)))
 			{
